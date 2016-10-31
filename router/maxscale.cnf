@@ -1,0 +1,51 @@
+[MaxScale]
+threads=1
+
+[master]
+type=server
+address=master
+port=3306
+protocol=MySQLBackend
+
+[slave]
+type=server
+address=slave
+port=3306
+protocol=MySQLBackend
+
+[MySQL Monitor]
+type=monitor
+module=mysqlmon
+servers=master,slave
+user=root
+passwd=foobar
+
+
+
+[SplitService router]
+type=service
+router=readwritesplit
+servers=master,slave
+user=root
+password=foobar
+
+[SplitService listener]
+type=listener
+service=SplitService router
+protocol=MySQLClient
+address=0.0.0.0
+port=3306
+socket=/var/run/mysqld/mysqld.sock
+
+
+
+[CLI]
+type=service
+router=cli
+
+[CLI Listener]
+type=listener
+service=CLI
+protocol=maxscaled
+address=0.0.0.0
+port=6603

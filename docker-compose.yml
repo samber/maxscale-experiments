@@ -1,0 +1,44 @@
+version: "2"
+
+services:
+  master:
+    image: mysql:5.6
+    expose:
+      - 3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=foobar
+      - MYSQL_USER=iadvize
+      - MYSQL_PASSWORD=iadvize
+      - MYSQL_DATABASE=iadvize
+    volumes:
+      - ./master/master.cnf:/etc/mysql/conf.d/master.cnf
+      - ./master/schema:/docker-entrypoint-initdb.d
+
+  slave:
+    image: mysql:5.6
+    expose:
+      - 3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=foobar
+      - MYSQL_USER=iadvize
+      - MYSQL_PASSWORD=iadvize
+      - MYSQL_DATABASE=iadvize
+    volumes:
+      - ./slave/slave.cnf:/etc/mysql/conf.d/slave.cnf
+      - ./slave/schema:/docker-entrypoint-initdb.d
+    depends_on:
+      - master
+
+  router:
+    build: .
+    depends_on:
+      - master
+      - slave
+    ports:
+      - 3306:3306
+    volumes:
+      - ./router/maxscale.cnf:/etc/maxscale.cnf
+
+  cli:
+    image: mysql:5.6
+    command: mysql -h router -u iadvize -p
