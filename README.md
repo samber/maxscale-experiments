@@ -1,3 +1,7 @@
+Warning
+--
+
+Please take a look on the [comparaison of ProxySQL and MaxScale v1.3](http://www.proxysql.com/blog/proxysql-vs-maxscale-persistent-connection-response-time).
 
 Setup
 --
