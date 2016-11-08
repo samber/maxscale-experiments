@@ -41,7 +41,6 @@ Execute some commands from a MySQL client, into the router, and see what happens
 
 ```
 $ docker-compose run --rm cli
-Enter password:
 
 mysql> USE foobar;
 Query OK, 0 rows affected (0.42 sec)
